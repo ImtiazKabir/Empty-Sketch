@@ -43,7 +43,7 @@ Vector *Vector_UNIT() {
   Vector *vec = (Vector *) malloc(sizeof(Vector));
   if (!vec)
     fprintf(stderr, "Failed to allocate memory");
-  float theta = (2 * (float) M_PI * (float) rand()) / RAND_MAX;
+  float theta = (2 * (float) M_PI * (float) rand()) / (float) RAND_MAX;
   vec->x = (float) cos(theta);
   vec->y = (float) sin(theta);
   return vec;

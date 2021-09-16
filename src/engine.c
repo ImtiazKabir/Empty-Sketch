@@ -6,16 +6,14 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-#ifdef USING_EMSCRIPTEN
+#ifdef __EMSCRIPTEN__
 #include <emscripten.h>
 #endif
 
-#include "engine_core.h"
-
-void main_loop(void *v_renderer) {
-  SDL_Renderer *renderer = (SDL_Renderer *)v_renderer;
+#include "engine.h"
 
 
+void main_loop(void *renderer) {
   // setup part
   static bool __run_setup__ = true;
   if (__run_setup__) {
@@ -26,17 +24,21 @@ void main_loop(void *v_renderer) {
   // handle event
   if (event_handler()) {
     clean_up();
-#ifdef USING_EMSCRIPTEN
+    #ifdef __EMSCRIPTEN__
     emscripten_cancel_main_loop();
-#else
+    #else
     __quit_window__ = true;
     return;
-#endif
+    #endif /* __EMSCRIPTEN__ */
   }
 
   // update and draw
   update();
+
+  renderer = (SDL_Renderer *)renderer;
   draw(renderer);
   SDL_Delay(1000 / FPS);
   SDL_RenderPresent(renderer);
 }
+
+

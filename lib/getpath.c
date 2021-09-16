@@ -4,17 +4,17 @@
 
 #include "internal_stuff.h"
 
-#ifndef USING_EMSCRIPTEN
+#ifndef __EMSCRIPTEN__
 #include "whereami.h"
 #endif
 
 
 char *__get_path__(const char *child) {
-#ifdef USING_EMSCRIPTEN
+  #ifdef __EMSCRIPTEN__
   char loc[] = "build/";
   char *path = (char *) malloc(strlen(loc) + strlen(child));
   strcpy(path, loc);
-#else
+  #else
   int length = wai_getExecutablePath(NULL, 0, NULL);
   char *ex_path = (char *) malloc((size_t)(length + 1));
   int dirname_length;
@@ -34,7 +34,7 @@ char *__get_path__(const char *child) {
   strncpy(path, ex_path, (size_t)(t+1));
   free(ex_path);
   path[t+1] = '\0';
-#endif
+  #endif
   strcat(path, child);
   return path;
 }

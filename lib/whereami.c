@@ -681,7 +681,7 @@ int WAI_PREFIX(getModulePath)(char* out, int capacity, int* dirname_length)
 
 #else
 
-#error unsupported platform
+// #error unsupported platform
 
 #endif
 
