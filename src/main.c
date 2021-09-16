@@ -7,13 +7,10 @@
 #endif
 
 #include <SDL2/SDL.h>
-
 #include <SDL2/SDL_image.h>
 #include <stdbool.h>
+#include "param.h"
 
-#ifndef __EMSCRIPTEN__
-bool __quit_window__ = false;
-#endif
 
 int main(void) {
   SDL_Init(SDL_INIT_EVERYTHING);
@@ -24,18 +21,28 @@ int main(void) {
     SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
     WIDTH, HEIGHT,
     SDL_WINDOW_SHOWN);
-
   if (!window) __PRINT_ERROR__("Creating the window with SDL_CreateWindow");
+
   SDL_Renderer * renderer = SDL_CreateRenderer(
     window, -1, SDL_RENDERER_PRESENTVSYNC);
+  if (!renderer) {
+    __PRINT_ERROR__("Creating the renderer with SDL_CreateRenderer");
+  }
 
-  if (!renderer) __PRINT_ERROR__("Creating the renderer with SDL_CreateRenderer");
+
+  /* create the param */
+  MainLoopParam_t param = {
+    .renderer = renderer,
+    .setup_flag = true,
+    .quit_flag = false
+  };
+
 
   #ifdef __EMSCRIPTEN__
-  emscripten_set_main_loop_arg(main_loop, renderer, 0, 1);
+  emscripten_set_main_loop_arg(main_loop, &param, 0, 1);
   #else
-  while (!__quit_window__) {
-    main_loop(renderer);
+  while (!param.quit_flag) {
+    main_loop(&param);
   }
   #endif
 

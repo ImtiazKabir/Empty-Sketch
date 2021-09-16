@@ -11,14 +11,15 @@
 #endif
 
 #include "engine.h"
+#include "param.h"
 
 
-void main_loop(void *renderer) {
+void main_loop(void *v_param) {
   // setup part
-  static bool __run_setup__ = true;
-  if (__run_setup__) {
+  MainLoopParam_t * param = (MainLoopParam_t *) v_param;
+  if (param->setup_flag) {
     setup();
-    __run_setup__ = false;
+    param->setup_flag = false;
   }
 
   // handle event
@@ -27,7 +28,7 @@ void main_loop(void *renderer) {
     #ifdef __EMSCRIPTEN__
     emscripten_cancel_main_loop();
     #else
-    __quit_window__ = true;
+    param->quit_flag = true;
     return;
     #endif /* __EMSCRIPTEN__ */
   }
@@ -35,7 +36,7 @@ void main_loop(void *renderer) {
   // update and draw
   update();
 
-  renderer = (SDL_Renderer *)renderer;
+  SDL_Renderer * renderer = param->renderer;
   draw(renderer);
   SDL_Delay(1000 / FPS);
   SDL_RenderPresent(renderer);
