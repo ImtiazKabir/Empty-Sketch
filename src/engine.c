@@ -9,7 +9,6 @@
 
 typedef struct MainLoopParam {
   SDL_Renderer * renderer;
-  bool setup_flag;
   bool quit_flag;
 } MainLoopParam_t;
 
@@ -17,12 +16,12 @@ void main_loop(void *v_param);
 
 
 void start_everything(SDL_Renderer *renderer) {
+  setup();
+
   MainLoopParam_t param = {
     .renderer = renderer,
-    .setup_flag = true,
-    .quit_flag = false
+    .quit_flag = false,
   };
-
 
   #ifdef __EMSCRIPTEN__
   emscripten_set_main_loop_arg(main_loop, &param, 0, 1);
@@ -31,20 +30,16 @@ void start_everything(SDL_Renderer *renderer) {
     main_loop(&param);
   }
   #endif
+
+  clean_up();
 }
 
 
 void main_loop(void *v_param) {
-  // setup part
   MainLoopParam_t * param = (MainLoopParam_t *) v_param;
-  if (param->setup_flag) {
-    setup();
-    param->setup_flag = false;
-  }
 
-  // handle event
+  /* handle event */
   if (event_handler()) {
-    clean_up();
     #ifdef __EMSCRIPTEN__
     emscripten_cancel_main_loop();
     #else
@@ -53,7 +48,7 @@ void main_loop(void *v_param) {
     #endif /* __EMSCRIPTEN__ */
   }
 
-  // update and draw
+  /* update and draw */
   update();
 
   SDL_Renderer * renderer = param->renderer;

@@ -12,8 +12,9 @@
 #define FPS (uint32_t)60
 
 static inline void __PRINT_ERROR__(char const * const func_name) {
-  fprintf(stderr, "%s did not work\n---------------\n%s\n\n\n\n",
-                    func_name, SDL_GetError());
+  fprintf(stderr, "~~IM~~ %s did not work\n"
+                  "----------------------\n"
+                  "%s", func_name, SDL_GetError());
   SDL_ClearError();
 }
 char *__get_path__(char const * const child);  /* lib/getpath.c */
