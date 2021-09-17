@@ -18,10 +18,6 @@ static inline void __PRINT_ERROR__(char const * const func_name) {
 }
 char *__get_path__(char const * const child);  /* lib/getpath.c */
 
-/* engine.c */
-void main_loop(void * v_renderer);
-
-
 
 /* event.c */
 bool event_handler(void);
