@@ -5,8 +5,8 @@ CFLAGS = -Wall -Wextra -Wconversion -Wpedantic -Wformat=2 -Wno-unused-parameter\
 BINOUT = build/main.exe
 
 
-SRC = lib/getpath.c lib/whereami.c src/main.c src/sketch.c src/loop.c\
-			src/once.c src/event.c src/MEOW.c
+SRC = src/main.c src/sketch.c src/loop.c src/once.c src/event.c src/MEOW.c
+LIBSRC = lib/getpath.c lib/whereami.c lib/vector.c
 
 
 INC = -Iinclude
@@ -14,8 +14,7 @@ LIB = lib
 SDL_LIB = -lSDL2 -lSDL2 -lSDL2_image
 SDL_FILE = build\main.exe
 DEFINE = -DSDL_MAIN_HANDLED -DSTB_RECT_PACK_IMPLEMENTATION\
-				-DSTB_TRUETYPE_IMPLEMENTATION -DSTBTTF_IMPLEMENTATION\
-				-DSTB_DS_IMPLEMENTATION
+				-DSTB_TRUETYPE_IMPLEMENTATION -DSTBTTF_IMPLEMENTATION
 
 EMCC = emcc
 EMOUT = index.js
@@ -31,11 +30,11 @@ default:
 
 ems:
 	$(EMCC) $(CFLAGS) $(DEFINE) -o $(EMOUT) $(EMFLAGS) --preload-file $(ASSETS) \
-	$(SRC) $(INC) -isystem $(LIB)
+	$(SRC) $(LIBSRC) $(INC) -isystem $(LIB)
 
 sdl:
-	$(CC) $(CFLAGS) $(DEFINE) $(SRC) -o $(BINOUT) $(SDL_LIB) $(INC) -isystem \
-	$(LIB)
+	$(CC) $(CFLAGS) $(DEFINE) $(SRC) $(LIBSRC) -o $(BINOUT) $(SDL_LIB) $(INC) \
+	-isystem $(LIB)
 
 run:
 	build/main.exe
