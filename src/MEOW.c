@@ -1,5 +1,5 @@
-#include "mechanism.h"
-#include "engine.h"
+#include "MEOW.h"
+#include "sketch.h"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_Image.h>
@@ -8,7 +8,7 @@
 #include <emscripten.h>
 #endif
 
-void init_everything(SDL_Window ** window, SDL_Renderer ** renderer) {
+void MEOW_Init(SDL_Window ** window, SDL_Renderer ** renderer) {
   SDL_Init(SDL_INIT_EVERYTHING);
   IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
 
@@ -17,16 +17,18 @@ void init_everything(SDL_Window ** window, SDL_Renderer ** renderer) {
     SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
     WIDTH, HEIGHT,
     SDL_WINDOW_SHOWN);
-  if (!*window) __PRINT_ERROR__("Creating the window with SDL_CreateWindow");
+  if (!*window) {
+    MEOW_Error("Creating the window with SDL_CreateWindow");
+  }
 
   *renderer = SDL_CreateRenderer(
     *window, -1, SDL_RENDERER_PRESENTVSYNC);
   if (!*renderer) {
-    __PRINT_ERROR__("Creating the renderer with SDL_CreateRenderer");
+    MEOW_Error("Creating the renderer with SDL_CreateRenderer");
   }
 }
 
-void clean_everything(SDL_Window * window, SDL_Renderer * renderer) {
+void MEOW_Destroy(SDL_Window * window, SDL_Renderer * renderer) {
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);
   IMG_Quit();

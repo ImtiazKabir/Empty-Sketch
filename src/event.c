@@ -1,7 +1,7 @@
 #include <SDL2/SDL.h>
 #include <stdbool.h>
 
-#include "engine.h"
+#include "sketch.h"
 
 bool event_handler(void) {
   SDL_Event event;

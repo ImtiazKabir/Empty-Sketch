@@ -5,8 +5,8 @@ CFLAGS = -Wall -Wextra -Wconversion -Wpedantic -Wformat=2 -Wno-unused-parameter\
 BINOUT = build/main.exe
 
 
-SRC = lib/getpath.c lib/whereami.c src/main.c src/engine.c src/loop.c\
-			src/once.c src/event.c src/mechanism.c
+SRC = lib/getpath.c lib/whereami.c src/main.c src/sketch.c src/loop.c\
+			src/once.c src/event.c src/MEOW.c
 
 
 INC = -Iinclude

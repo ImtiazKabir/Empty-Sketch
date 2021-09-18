@@ -1,11 +1,11 @@
 #include <SDL2/SDL.h>
-#include "mechanism.h"
+#include "MEOW.h"
 
 int main(void) {
   SDL_Window * window;
   SDL_Renderer * renderer;
-  init_everything(&window, &renderer);
-  start_everything(renderer);
-  clean_everything(window, renderer);
+  MEOW_Init(&window, &renderer);
+  MEOW_Repeat(renderer);
+  MEOW_Destroy(window, renderer);
   return 0;
 }

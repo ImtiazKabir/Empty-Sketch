@@ -5,7 +5,7 @@
 #include <emscripten.h>
 #endif
 
-#include "engine.h"
+#include "sketch.h"
 
 typedef struct MainLoopParam {
   SDL_Renderer * renderer;
@@ -15,7 +15,8 @@ typedef struct MainLoopParam {
 void main_loop(void *v_param);
 
 
-void start_everything(SDL_Renderer *renderer) {
+void MEOW_Repeat(SDL_Renderer *renderer) {
+  /* Definition and setting variables for sketch */
   setup();
 
   MainLoopParam_t param = {
@@ -31,6 +32,7 @@ void start_everything(SDL_Renderer *renderer) {
   }
   #endif
 
+  /* cleaning up sekcth "things" */
   clean_up();
 }
 

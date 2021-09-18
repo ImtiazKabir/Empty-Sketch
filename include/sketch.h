@@ -1,5 +1,5 @@
-#ifndef ENGINE_FOR_EMS_SDL
-#define ENGINE_FOR_EMS_SDL
+#ifndef LIB_MEOW_SKETCH_H
+#define LIB_MEOW_SKETCH_H
 
 #include <stdio.h>
 #include <SDL2/SDL.h>
@@ -11,13 +11,13 @@
 #define HEIGHT (int)500
 #define FPS (uint32_t)60
 
-static inline void __PRINT_ERROR__(char const * const func_name) {
+static inline void MEOW_Error(char const * const func_name) {
   fprintf(stderr, "~~IM~~ %s did not work\n"
                   "----------------------\n"
                   "%s", func_name, SDL_GetError());
   SDL_ClearError();
 }
-char *__get_path__(char const * const child);  /* lib/getpath.c */
+char * MEOW_GetPath(char const * const child);  /* lib/getpath.c */
 
 
 /* event.c */
@@ -31,4 +31,4 @@ void clean_up(void);
 void update(void);
 void draw(SDL_Renderer * renderer);
 
-#endif /* ENGINE_FOR_EMS_SDL */
+#endif /* LIB_MEOW_SKETCH_H */

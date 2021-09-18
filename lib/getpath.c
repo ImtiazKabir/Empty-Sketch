@@ -7,7 +7,7 @@
 #endif
 
 
-char *__get_path__(const char *child) {
+char * MEOW_GetPath(char const * const child) {
   #ifdef __EMSCRIPTEN__
   char loc[] = "build/";
   char *path = (char *) malloc(strlen(loc) + strlen(child));
