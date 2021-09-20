@@ -1,46 +1,69 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Wconversion -Wpedantic -Wformat=2 -Wno-unused-parameter\
-					-Wshadow -Wwrite-strings -Wstrict-prototypes -Wold-style-definition \
-          -Wredundant-decls -Wnested-externs -Wmissing-include-dirs -O3
-BINOUT = build/main.exe
-
-
-SRC = src/main.c src/sketch.c src/loop.c src/once.c src/event.c src/MEOW.c
-LIBSRC = lib/getpath.c lib/whereami.c lib/vector.c
-
-
-INC = -Iinclude
-LIB = lib
-SDL_LIB = -lSDL2 -lSDL2 -lSDL2_image
-SDL_FILE = build\main.exe
-DEFINE = -DSDL_MAIN_HANDLED -DSTB_RECT_PACK_IMPLEMENTATION\
-				-DSTB_TRUETYPE_IMPLEMENTATION -DSTBTTF_IMPLEMENTATION
-
 EMCC = emcc
+
+#-------------------------------  FLAGS  -------------------------------------#
+FLAGS= -Wall -Wextra -Wconversion -Wpedantic -Wformat=2\
+        -Wno-unused-parameter -Wshadow -Wwrite-strings -Wstrict-prototypes\
+        -Wold-style-definition -Wredundant-decls -Wnested-externs\
+        -Wmissing-include-dirs -O3 -std=c99
+
+EMFLAGS=$(FLAGS)
+EMFLAGS+=-s USE_SDL=2 -s USE_SDL_IMAGE=2 -s SDL2_IMAGE_FORMATS='["png", "jpg"]'
+
+# GCC warnings that Clang or emcc doesn't provide:
+CFLAGS=$(FLAGS)
+CFLAGS=-Wjump-misses-init -Wlogical-op
+
+#-----------------------------------------------------------------------------#
+
+TARGET=build/main.exe
 EMOUT = index.js
-EMFLAGS = -s USE_SDL=2 -s USE_SDL_IMAGE=2 -s SDL2_IMAGE_FORMATS='["png", "jpg"]'
-ASSETS = build/assets
-EMFILE = index.data index.js index.wasm
+
+SDL_OBJDIR=src/obj/sdl
+EMS_OBJDIR=src/obj/ems
+SRCDIR=src
+INCDIR=-Iinclude
+
+_OBJ= main.o sketch.o loop.o once.o event.o MEOW.o\
+      getpath.o whereami.o vector.o
+SDL_OBJ=$(addprefix $(SDL_OBJDIR)/, $(_OBJ))
+EMS_OBJ=$(addprefix $(EMS_OBJDIR)/, $(_OBJ))
+
+LIB=-lm
+SDL_LIB=-lSDL2 -lSDL2 -lSDL2_image
+DEFINE= -DSDL_MAIN_HANDLED -DSTB_RECT_PACK_IMPLEMENTATION\
+        -DSTB_TRUETYPE_IMPLEMENTATION -DSTBTTF_IMPLEMENTATION
+
+ASSETS=build/assets
+EMFILE=index.data index.js index.wasm
 
 
-.PHONY: default ems sdl run drm
-
+.PHONY:default
 default:
 	echo try with ems or sdl
 
-ems:
-	$(EMCC) $(CFLAGS) $(DEFINE) -o $(EMOUT) $(EMFLAGS) --preload-file $(ASSETS) \
-	$(SRC) $(LIBSRC) $(INC) -isystem $(LIB)
+.PHONY:ems
+ems: $(EMS_OBJ)
+	$(EMCC) -o $(EMOUT) $^ $(EMFLAGS) --preload-file $(ASSETS) $(LIB)
 
-sdl:
-	$(CC) $(CFLAGS) $(DEFINE) $(SRC) $(LIBSRC) -o $(BINOUT) $(SDL_LIB) $(INC) \
-	-isystem $(LIB)
+$(EMS_OBJDIR)/%.o: $(SRCDIR)/%.c
+	$(EMCC) -c -o $@ $< $(EMFLAGS) $(DEFINE) $(INCDIR)
 
+.PHONY:sdl
+sdl: $(SDL_OBJ)
+	$(CC) -o $(TARGET) $^ $(CFLAGS) $(SDL_LIB)
+
+$(SDL_OBJDIR)/%.o: $(SRCDIR)/%.c
+	$(CC) -c -o $@ $< $(CFLAGS) $(DEFINE) $(INCDIR)
+
+.PHONY:run
 run:
 	build/main.exe
 
+.PHONY:drm
 drm:
 	drmemory build/main.exe
 
-clean:
-	del /f $(SDL_FILE) $(EMFILE)
+# .PHONY:clean
+# clean:
+# 	del /f $(SDL_FILE) $(EMFILE)
