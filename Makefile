@@ -64,6 +64,6 @@ run:
 drm:
 	drmemory build/main.exe
 
-# .PHONY:clean
-# clean:
-# 	del /f $(SDL_FILE) $(EMFILE)
+.PHONY:clean
+clean:
+	del /f $(subst /,\,$(TARGET) $(EMOUT) $(SDL_OBJDIR) $(EMS_OBJDIR))
