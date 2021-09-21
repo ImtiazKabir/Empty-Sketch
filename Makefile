@@ -2,10 +2,10 @@ CC = gcc
 EMCC = emcc
 
 #-------------------------------  FLAGS  -------------------------------------#
-FLAGS= -Wall -Wextra -Wconversion -Wpedantic -Wformat=2\
-        -Wno-unused-parameter -Wshadow -Wwrite-strings -Wstrict-prototypes\
-        -Wold-style-definition -Wredundant-decls -Wnested-externs\
-        -Wmissing-include-dirs -O3 -std=c99
+FLAGS=-Wall -Wextra -Wconversion -Wpedantic -Wformat=2\
+      -Wno-unused-parameter -Wshadow -Wwrite-strings -Wstrict-prototypes\
+      -Wold-style-definition -Wredundant-decls -Wnested-externs\
+      -Wmissing-include-dirs -O3 -std=c99
 
 EMFLAGS=$(FLAGS)
 EMFLAGS+=-s USE_SDL=2 -s USE_SDL_IMAGE=2 -s SDL2_IMAGE_FORMATS='["png", "jpg"]'
@@ -29,7 +29,6 @@ _OBJ= main.o sketch.o loop.o once.o event.o MEOW.o\
 SDL_OBJ=$(addprefix $(SDL_OBJDIR)/, $(_OBJ))
 EMS_OBJ=$(addprefix $(EMS_OBJDIR)/, $(_OBJ))
 
-LIB=-lm
 SDL_LIB=-lSDL2 -lSDL2 -lSDL2_image
 DEFINE= -DSDL_MAIN_HANDLED -DSTB_RECT_PACK_IMPLEMENTATION\
         -DSTB_TRUETYPE_IMPLEMENTATION -DSTBTTF_IMPLEMENTATION
@@ -44,7 +43,7 @@ default:
 
 .PHONY:ems
 ems: $(EMS_OBJ)
-	$(EMCC) -o $(EMOUT) $^ $(EMFLAGS) --preload-file $(ASSETS) $(LIB)
+	$(EMCC) -o $(EMOUT) $^ $(EMFLAGS) --preload-file $(ASSETS)
 
 $(EMS_OBJDIR)/%.o: $(SRCDIR)/%.c
 	$(EMCC) -c -o $@ $< $(EMFLAGS) $(DEFINE) $(INCDIR)

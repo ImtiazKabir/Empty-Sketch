@@ -8,12 +8,18 @@
 #include <emscripten.h>
 #endif
 
-void MEOW_Init(SDL_Window ** window, SDL_Renderer ** renderer) {
+void MEOW_Init(
+  SDL_Window ** window,
+  SDL_Renderer ** renderer,
+  int const WIDTH,
+  int const HEIGHT,
+  char const * const TITLE
+) {
   SDL_Init(SDL_INIT_EVERYTHING);
   IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
 
   *window = SDL_CreateWindow(
-    TITLE_OF_WINDOW,
+    TITLE,
     SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
     WIDTH, HEIGHT,
     SDL_WINDOW_SHOWN);

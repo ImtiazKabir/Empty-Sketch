@@ -6,11 +6,6 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#define TITLE_OF_WINDOW "TITLE OF WINDOW"
-#define WIDTH (int)500
-#define HEIGHT (int)500
-#define FPS (uint32_t)60
-
 static inline void MEOW_Error(char const * const func_name) {
   fprintf(stderr, "~~IM~~ %s did not work\n"
                   "----------------------\n"

@@ -10,18 +10,25 @@
 typedef struct MainLoopParam {
   SDL_Renderer * renderer;
   bool quit_flag;
+  int const FPS;
 } MainLoopParam_t;
 
 void main_loop(void *v_param);
 
 
-void MEOW_Repeat(SDL_Renderer *renderer) {
+void MEOW_Repeat(
+  SDL_Renderer *renderer,
+  int const WIDTH,
+  int const HEIGHT,
+  int const FPS
+) {
   /* Definition and setting variables for sketch */
   setup();
 
   MainLoopParam_t param = {
     .renderer = renderer,
     .quit_flag = false,
+    .FPS = FPS
   };
 
   #ifdef __EMSCRIPTEN__
@@ -53,10 +60,9 @@ void main_loop(void *v_param) {
   /* update and draw */
   update();
 
-  SDL_Renderer * renderer = param->renderer;
-  draw(renderer);
-  SDL_Delay(1000 / FPS);
-  SDL_RenderPresent(renderer);
+  draw(param->renderer);
+  SDL_Delay(1000 / (unsigned)param->FPS);
+  SDL_RenderPresent(param->renderer);
 }
 
 
