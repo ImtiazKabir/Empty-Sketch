@@ -10,6 +10,8 @@
 typedef struct MainLoopParam {
   SDL_Renderer * renderer;
   bool quit_flag;
+  int const WIDTH;
+  int const HEIGHT;
   int const FPS;
 } MainLoopParam_t;
 
@@ -28,6 +30,8 @@ void MEOW_Repeat(
   MainLoopParam_t param = {
     .renderer = renderer,
     .quit_flag = false,
+    .WIDTH = WIDTH,
+    .HEIGHT = HEIGHT,
     .FPS = FPS
   };
 

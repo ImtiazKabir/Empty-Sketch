@@ -46,7 +46,7 @@ ems: $(EMS_OBJ)
 	$(EMCC) -o $(EMOUT) $^ $(EMFLAGS) --preload-file $(ASSETS)
 
 $(EMS_OBJDIR)/%.o: $(SRCDIR)/%.c
-	$(EMCC) -c -o $@ $< $(EMFLAGS) $(DEFINE) $(INCDIR)
+	$(EMCC) -c -o $@ $< $(EMFLAGS) -lm $(DEFINE) $(INCDIR)
 
 .PHONY:sdl
 sdl: $(SDL_OBJ)
