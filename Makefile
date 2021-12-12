@@ -43,10 +43,10 @@ default:
 
 .PHONY:ems
 ems: $(EMS_OBJ)
-	$(EMCC) -o $(EMOUT) $^ $(EMFLAGS) --preload-file $(ASSETS)
+	$(EMCC) -o $(EMOUT) $^ $(EMFLAGS) -lm --preload-file $(ASSETS)
 
 $(EMS_OBJDIR)/%.o: $(SRCDIR)/%.c
-	$(EMCC) -c -o $@ $< $(EMFLAGS) -lm $(DEFINE) $(INCDIR)
+	$(EMCC) -c -o $@ $< $(EMFLAGS) $(DEFINE) $(INCDIR)
 
 .PHONY:sdl
 sdl: $(SDL_OBJ)
